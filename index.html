@@ -1,0 +1,733 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Screening Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 118, 117, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            color: #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            color: #ffffff;
+            padding: 3rem 2em 2rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(124, 58, 237, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        
+        header h1 {
+            margin: 0;
+            font-size: 2.8em;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+            color: #ffffff;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 2rem;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-grow: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            padding: 2rem;
+            flex: 1;
+            min-width: 320px;
+            max-width: 45%;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7c3aed 0%, #4c1d95 50%, #9333ea 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        .card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.4),
+                0 8px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.15);
+            background: rgba(30, 41, 59, 0.9);
+        }
+        
+        .card h2 {
+            color: #f8fafc;
+            margin-top: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+            border-bottom: 2px solid transparent;
+            background: linear-gradient(90deg, #7c3aed 0%, #4c1d95 100%);
+            background-size: 0% 2px;
+            background-repeat: no-repeat;
+            background-position: left bottom;
+            padding-bottom: 0.75rem;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.015em;
+            transition: background-size 0.3s ease;
+        }
+        
+        .card:hover h2 {
+            background-size: 100% 2px;
+        }
+        
+        .card p {
+            line-height: 1.7;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        
+        .card ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .card ul li {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            margin: 0.5rem 0;
+            padding: 1rem 1.25rem;
+            border-radius: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px solid rgba(124, 58, 237, 0.1);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            color: #e2e8f0;
+        }
+        
+        .card ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        
+        .card ul li:hover::before {
+            transform: scaleY(1);
+        }
+        
+        .card ul li:hover {
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            color: white;
+            transform: translateX(8px);
+            box-shadow: 0 4px 12px rgba(124, 58, 237, 0.4);
+        }
+        
+        .card ul li:hover span {
+            color: #ffffff;
+        }
+        
+        .card ul li span {
+            color: #a78bfa;
+            font-weight: 600;
+        }
+        
+        .score-display {
+            font-size: 4rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+            margin: 2rem 0;
+            letter-spacing: -0.025em;
+            text-shadow: 0 2px 4px rgba(5, 150, 105, 0.3);
+            animation: pulse 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .recommendation {
+            font-size: 1.125rem;
+            font-weight: 600;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: #f59e0b;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.2) 0%, rgba(253, 230, 138, 0.2) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .recommendation::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .recommendation:hover::before {
+            left: 100%;
+        }
+        
+        .recommendation.strong {
+            color: #10b981;
+            background: linear-gradient(135deg, rgba(209, 250, 229, 0.2) 0%, rgba(167, 243, 208, 0.2) 100%);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .recommendation.good {
+            color: #2dd4bf;
+            background: linear-gradient(135deg, rgba(204, 251, 241, 0.2) 0%, rgba(153, 246, 228, 0.2) 100%);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .recommendation.moderate {
+            color: #f59e0b;
+            background: linear-gradient(135deg, rgba(254, 243, 199, 0.2) 0%, rgba(253, 230, 138, 0.2) 100%);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .recommendation.weak, .recommendation.poor {
+            color: #f87171;
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.2) 0%, rgba(254, 202, 202, 0.2) 100%);
+            border: 1px solid rgba(248, 113, 113, 0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-content {
+            white-space: pre-wrap;
+            max-height: 350px;
+            overflow-y: auto;
+            border: 1px solid #334155;
+            padding: 1.5rem;
+            border-radius: 8px;
+            background: rgba(15, 23, 42, 0.7);
+            font-size: 0.9rem;
+            color: #e2e8f0;
+            line-height: 1.7;
+        }
+        
+        .section-content::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        .section-content::-webkit-scrollbar-track {
+            background: #1e293b;
+            border-radius: 3px;
+        }
+        
+        .section-content::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 3px;
+        }
+        
+        .section-content::-webkit-scrollbar-thumb:hover {
+            background: #64748b;
+        }
+        
+        .loading-spinner {
+            border: 4px solid #1e293b;
+            border-top: 4px solid #7c3aed;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 2rem auto;
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            color: #f87171;
+            text-align: center;
+            margin-top: 1.5rem;
+            font-size: 0.95rem;
+            font-weight: 500;
+            padding: 1rem;
+            background: linear-gradient(135deg, rgba(254, 226, 226, 0.2) 0%, rgba(254, 202, 202, 0.2) 100%);
+            border: 1px solid #fca5a5;
+            border-radius: 8px;
+        }
+        
+        #fileInput, #jobDescriptionInput {
+            display: block;
+            width: 100%;
+            padding: 0.875rem 1rem;
+            margin: 1rem 0;
+            border: 2px solid #334155;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+            background: rgba(15, 23, 42, 0.7);
+            color: #e2e8f0;
+        }
+        
+        #fileInput:focus, #jobDescriptionInput:focus {
+            outline: none;
+            border-color: #7c3aed;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2);
+        }
+        
+        #jobDescriptionInput {
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+            line-height: 1.6;
+        }
+        
+        #submitBtn {
+            display: block;
+            width: 100%;
+            padding: 1.25rem 1.5rem;
+            margin: 1.5rem 0;
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 4px 15px rgba(124, 58, 237, 0.5),
+                0 2px 4px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #submitBtn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+        
+        #submitBtn:hover::before {
+            left: 100%;
+        }
+        
+        #submitBtn:hover {
+            background: linear-gradient(135deg, #6d28d9 0%, #5b21b6 100%);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 25px rgba(124, 58, 237, 0.6),
+                0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        #submitBtn:active {
+            transform: translateY(0);
+        }
+        
+        #submitBtn:disabled {
+            background: linear-gradient(135deg, #334155 0%, #1e293b 100%);
+            color: #64748b;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .form-section {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            padding: 2.5rem;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, #7c3aed 0%, #4c1d95 50%, #9333ea 100%);
+        }
+        
+        .form-section h2 {
+            color: #f8fafc;
+            margin-top: 0;
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            letter-spacing: -0.015em;
+            background: linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                gap: 1rem;
+            }
+            
+            .card {
+                max-width: 100%;
+                padding: 1.5rem;
+            }
+            
+            .form-section {
+                padding: 1.5rem;
+                margin: 0 0 1rem 0;
+            }
+            
+            header {
+                padding: 1.5rem 1rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            .score-display {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0.75rem;
+            }
+            
+            .card {
+                padding: 1.25rem;
+            }
+            
+            .form-section {
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Resume Screening Dashboard</h1>
+    </header>
+    <div class="container">
+        <div class="form-section">
+            <h2>Upload Resume & Job Description</h2>
+            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt">
+            <textarea id="jobDescriptionInput" rows="8" placeholder="Enter Job Description here..."></textarea>
+            <button id="submitBtn">Analyze Resume</button>
+            <div id="loadingSpinner" class="loading-spinner"></div>
+            <div id="errorMessage" class="error-message"></div>
+        </div>
+
+        <div id="overallMatchCard" class="card" style="display: none;">
+            <h2>Overall Match</h2>
+            <div class="score-display" id="overallScore">--</div>
+            <p class="recommendation" id="overallRecommendation">Analyzing...</p>
+        </div>
+
+        <div id="geminiAnalysisCard" class="card" style="display: none;">
+            <h2>Gemini AI Analysis</h2>
+            <div class="section-content" id="geminiAnalysisContent">
+                Detailed AI feedback will appear here.
+            </div>
+        </div>
+
+        <div id="skillsMatchCard" class="card" style="display: none;">
+            <h2>Matched Skills</h2>
+            <ul id="matchedSkillsList">
+                <li>No skills matched yet.</li>
+            </ul>
+        </div>
+
+        <div id="otherInfoCard" class="card" style="display: none;">
+            <h2>Candidate Information</h2>
+            <p><strong>Years of Experience:</strong> <span id="experienceYears">--</span></p>
+            <p><strong>Emails:</strong> <span id="contactEmails">--</span></p>
+            <p><strong>Phones:</strong> <span id="contactPhones">--</span></p>
+            <p><strong>LinkedIn Profiles:</strong> <span id="contactLinkedIn">--</span></p>
+            <p><strong>GitHub Profiles:</strong> <span id="contactGitHub">--</span></p>
+            <p><strong>Education:</strong> <span id="educationInfo">--</span></p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const fileInput = document.getElementById('fileInput');
+            const jobDescriptionInput = document.getElementById('jobDescriptionInput');
+            const submitBtn = document.getElementById('submitBtn');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const errorMessageDiv = document.getElementById('errorMessage');
+
+            const overallMatchCard = document.getElementById('overallMatchCard');
+            const overallScoreSpan = document.getElementById('overallScore');
+            const overallRecommendationP = document.getElementById('overallRecommendation');
+
+            const geminiAnalysisCard = document.getElementById('geminiAnalysisCard');
+            const geminiAnalysisContentDiv = document.getElementById('geminiAnalysisContent');
+
+            const skillsMatchCard = document.getElementById('skillsMatchCard');
+            const matchedSkillsList = document.getElementById('matchedSkillsList');
+
+            const otherInfoCard = document.getElementById('otherInfoCard');
+            const experienceYearsSpan = document.getElementById('experienceYears');
+            const contactEmailsSpan = document.getElementById('contactEmails');
+            const contactPhonesSpan = document.getElementById('contactPhones');
+            const contactLinkedInSpan = document.getElementById('contactLinkedIn');
+            const contactGitHubSpan = document.getElementById('contactGitHub');
+            const educationInfoSpan = document.getElementById('educationInfo');
+
+            // Function to reset the UI
+            const resetUI = () => {
+                errorMessageDiv.textContent = '';
+                overallMatchCard.style.display = 'none';
+                geminiAnalysisCard.style.display = 'none';
+                skillsMatchCard.style.display = 'none';
+                otherInfoCard.style.display = 'none';
+
+                overallScoreSpan.textContent = '--';
+                overallRecommendationP.textContent = 'Analyzing...';
+                overallRecommendationP.className = 'recommendation'; // Reset classes
+                geminiAnalysisContentDiv.textContent = 'Detailed AI feedback will appear here.';
+                matchedSkillsList.innerHTML = '<li>No skills matched yet.</li>';
+                experienceYearsSpan.textContent = '--';
+                contactEmailsSpan.textContent = '--';
+                contactPhonesSpan.textContent = '--';
+                contactLinkedInSpan.textContent = '--';
+                contactGitHubSpan.textContent = '--';
+                educationInfoSpan.textContent = '--';
+            };
+
+            submitBtn.addEventListener('click', async () => {
+                resetUI(); // Clear previous results
+                const resumeFile = fileInput.files[0];
+                const jobDescription = jobDescriptionInput.value.trim();
+
+                if (!resumeFile) {
+                    errorMessageDiv.textContent = 'Please select a resume file.';
+                    return;
+                }
+                if (!jobDescription) {
+                    errorMessageDiv.textContent = 'Please enter a job description.';
+                    return;
+                }
+
+                const formData = new FormData();
+                formData.append('resume', resumeFile);
+                formData.append('job_description', jobDescription);
+
+                loadingSpinner.style.display = 'block';
+                submitBtn.disabled = true;
+
+                try {
+                    const response = await fetch('http://localhost:5001/api/screen', {
+                        method: 'POST',
+                        body: formData,
+                    });
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    console.log('API Response:', data); // Log the full response for debugging
+
+                    // Show cards
+                    overallMatchCard.style.display = 'block';
+                    geminiAnalysisCard.style.display = 'block';
+                    skillsMatchCard.style.display = 'block';
+                    otherInfoCard.style.display = 'block';
+
+                    let compositeScore = 0;
+                    let overallRecommendation = 'N/A';
+                    let extractedMatchedSkills = [];
+
+                    // Populate Gemini AI Analysis Card first
+                    const aiAnalysisContent = data.ai_analysis || 'No AI analysis available.';
+                    geminiAnalysisContentDiv.textContent = aiAnalysisContent;
+
+                    // Attempt to extract Overall Match Score from ai_analysis string as a primary source
+                    const scoreMatch = aiAnalysisContent.match(/Overall Match Score: (\d+)%/);
+                    if (scoreMatch && scoreMatch[1]) {
+                        compositeScore = parseInt(scoreMatch[1]);
+                    } else if (data.scores && data.scores.composite_score !== undefined) {
+                        // Fallback to structured data if not found in ai_analysis string
+                        compositeScore = data.scores.composite_score;
+                    }
+                    overallScoreSpan.textContent = compositeScore !== undefined ? `${compositeScore}%` : '--';
+
+
+                    // Attempt to extract Overall Recommendation from ai_analysis string as a primary source
+                    const recommendationMatch = aiAnalysisContent.match(/Overall Recommendation:\s*(.*?)(?:\n\n|\n\d+\.\s+\*\*|$)/); // More flexible
+                    if (recommendationMatch && recommendationMatch[1]) {
+                         overallRecommendation = recommendationMatch[1].trim();
+                         // Clean up any trailing asterisks or markdown
+                         overallRecommendation = overallRecommendation.replace(/\*\*|__/g, '');
+                    } else if (data.recommendation && data.recommendation.overall) {
+                        // Fallback to structured data
+                        overallRecommendation = data.recommendation.overall;
+                    }
+                    overallRecommendationP.textContent = overallRecommendation;
+                    overallRecommendationP.className = 'recommendation'; // Reset first
+                    if (compositeScore >= 80) {
+                        overallRecommendationP.classList.add('strong');
+                    } else if (compositeScore >= 65) {
+                        overallRecommendationP.classList.add('good');
+                    } else if (compositeScore >= 50) {
+                        overallRecommendationP.classList.add('moderate');
+                    } else if (compositeScore >= 35) {
+                        overallRecommendationP.classList.add('weak');
+                    } else {
+                        overallRecommendationP.classList.add('poor');
+                    }
+
+                    // Attempt to extract Matched Skills from ai_analysis string as a primary source
+                    // Changed regex to be more robust
+                    const matchedSkillsSectionMatch = aiAnalysisContent.match(/\*\*Matched Skills:\*\*([\s\S]*?)(?=\n\n|\n\d+\.\s+\*\*|$)/);
+                    if (matchedSkillsSectionMatch && matchedSkillsSectionMatch[1]) {
+                        const skillsText = matchedSkillsSectionMatch[1];
+                        // Extract lines that start with * and then clean up the skill names
+                        extractedMatchedSkills = skillsText.split('\n')
+                            .map(line => line.trim())
+                            .filter(line => line.startsWith('*'))
+                            .map(line => line.replace(/^\*\s*\*\*?|\:\s*.*$/g, '').trim())
+                            .filter(skill => skill.length > 0);
+                    }
+
+                    // Fallback to structured data for matched skills if not extracted from text
+                    if (extractedMatchedSkills.length === 0 && data.matching && data.matching.matched_skills && data.matching.matched_skills.length > 0) {
+                        extractedMatchedSkills = data.matching.matched_skills;
+                    }
+
+                    // Populate Matched Skills List
+                    if (extractedMatchedSkills.length > 0) {
+                        matchedSkillsList.innerHTML = '';
+                        extractedMatchedSkills.forEach(skill => {
+                            const li = document.createElement('li');
+                            li.textContent = skill;
+                            matchedSkillsList.appendChild(li);
+                        });
+                    } else {
+                        matchedSkillsList.innerHTML = '<li>No specific skills matched.</li>';
+                    }
+
+                    // Populate Other Info Card
+                    experienceYearsSpan.textContent = data.candidate_info && data.candidate_info.experience_years !== undefined ? data.candidate_info.experience_years : '--';
+                    contactEmailsSpan.textContent = (data.candidate_info && data.candidate_info.contact_info && data.candidate_info.contact_info.emails && data.candidate_info.contact_info.emails.length > 0) ? data.candidate_info.contact_info.emails.join(', ') : 'N/A';
+                    contactPhonesSpan.textContent = (data.candidate_info && data.candidate_info.contact_info && data.candidate_info.contact_info.phones && data.candidate_info.contact_info.phones.length > 0) ? data.candidate_info.contact_info.phones.join(', ') : 'N/A';
+                    contactLinkedInSpan.textContent = (data.candidate_info && data.candidate_info.contact_info && data.candidate_info.contact_info.linkedin_profiles && data.candidate_info.contact_info.linkedin_profiles.length > 0) ? data.candidate_info.contact_info.linkedin_profiles.join(', ') : 'N/A';
+                    contactGitHubSpan.textContent = (data.candidate_info && data.candidate_info.contact_info && data.candidate_info.contact_info.github_profiles && data.candidate_info.contact_info.github_profiles.length > 0) ? data.candidate_info.contact_info.github_profiles.join(', ') : 'N/A';
+                    educationInfoSpan.textContent = (data.candidate_info && data.candidate_info.education && data.candidate_info.education.length > 0) ? data.candidate_info.education.join('; ') : 'N/A';
+
+
+                } catch (error) {
+                    console.error('Error during fetch:', error);
+                    errorMessageDiv.textContent = `Error: ${error.message}. Please ensure your Python backend is running on http://localhost:5001. Check browser console for more details.`;
+                    // Hide cards if an error occurred
+                    resetUI();
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+    </script>
+</body>
+</html>
